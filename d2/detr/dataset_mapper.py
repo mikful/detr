@@ -30,23 +30,21 @@ def build_transform_gen(cfg, is_train):
         assert len(min_size) == 2, "more than 2 ({}) min_size(s) are provided for ranges".format(len(min_size))
 
     logger = logging.getLogger(__name__)
-    logger.basicConfig(level=logging.INFO # allow DEBUG level messages to pass through the logger
-    )
     tfm_gens = []
     if is_train:
-        # tfm_gens.append(T.RandomFlip())
-        tfm_gens.extend([T.RandomFlip(prob=0.5, horizontal=False, vertical=True),
-                         T.RandomFlip(prob=0.5, horizontal=True, vertical=False),
-                         T.RandomRotation(angle=[340,20],  #  If sample_style=="range", a [min, max] interval from which to sample the angle (in degrees).
-                                            expand=True,   # choose if the image should be resized to fit the whole rotated image (default), or simply cropped
-                                            center=None, 
-                                            sample_style='range', 
-                                            interp=None),  ## None, which means that the center of rotation is the center of the image center has no effect if expand=True because it only affects shifting
-                         T.RandomContrast(0.9, 1.1),  # (INTENSITY_MIN, INTENSITY_MAX)
-                         T.RandomBrightness(0.9, 1.1),  # (INTENSITY_MIN, INTENSITY_MAX)
-                         T.RandomLighting(0.1),  # scale (float) – Standard deviation of principal component weighting.
-                         T.RandomSaturation(0.9, 1.1)   # (INTENSITY_MIN, INTENSITY_MAX)
-                         ])
+        tfm_gens.append(T.RandomFlip())
+        # tfm_gens.extend([T.RandomFlip(prob=0.5, horizontal=False, vertical=True),
+        #                  T.RandomFlip(prob=0.5, horizontal=True, vertical=False),
+        #                  T.RandomRotation(angle=[340,20],  #  If sample_style=="range", a [min, max] interval from which to sample the angle (in degrees).
+        #                                     expand=True,   # choose if the image should be resized to fit the whole rotated image (default), or simply cropped
+        #                                     center=None, 
+        #                                     sample_style='range', 
+        #                                     interp=None),  ## None, which means that the center of rotation is the center of the image center has no effect if expand=True because it only affects shifting
+        #                  T.RandomContrast(0.9, 1.1),  # (INTENSITY_MIN, INTENSITY_MAX)
+        #                  T.RandomBrightness(0.9, 1.1),  # (INTENSITY_MIN, INTENSITY_MAX)
+        #                  T.RandomLighting(0.1),  # scale (float) – Standard deviation of principal component weighting.
+        #                  T.RandomSaturation(0.9, 1.1)   # (INTENSITY_MIN, INTENSITY_MAX)
+        #                  ])
     tfm_gens.append(T.ResizeShortestEdge(min_size, max_size, sample_style))
     if is_train:
         logger.info("TransformGens used in training: " + str(tfm_gens))
