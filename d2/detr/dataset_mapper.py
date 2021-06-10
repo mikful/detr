@@ -30,7 +30,8 @@ def build_transform_gen(cfg, is_train):
         assert len(min_size) == 2, "more than 2 ({}) min_size(s) are provided for ranges".format(len(min_size))
 
     logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
+    logger.basicConfig(level=logging.INFO # allow DEBUG level messages to pass through the logger
+    )
     tfm_gens = []
     if is_train:
         # tfm_gens.append(T.RandomFlip())
